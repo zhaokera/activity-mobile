@@ -1,16 +1,16 @@
 # activitys-mobile
 
-## Project setup
+## 项目安装
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 测试环境
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 正式环境
 ```
 npm run build
 ```
