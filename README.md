@@ -15,9 +15,12 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
+### 配置
 ```
-npm run lint
+1、@vue/cli 4.5.9 脚手架创建项目
+2、postcss-px-to-viewport适配移动端
+3、vant UI库
+4、babel-plugin-import按需加载
 ```
 
 ### Customize configuration
