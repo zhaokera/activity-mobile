@@ -5,7 +5,12 @@
       <div class="title">欢客互动的欢小铺</div>
     </div>
     <div class="notice-view">
-      <van-swipe class="swipe-view" vertical :autoplay="3000">
+      <van-swipe
+        class="swipe-view"
+        :autoplay="3000"
+        vertical
+        :show-indicators="false"
+      >
         <van-swipe-item
           class="swipe-item-view"
           v-for="item of noticeList"
@@ -21,20 +26,28 @@
         </van-swipe-item>
       </van-swipe>
     </div>
+    <lucky-wheel></lucky-wheel>
   </div>
 </template>
 
 <script>
 import { Swipe, SwipeItem } from "vant";
+import LuckyWheel from "../../components/lucky-wheel";
 
 export default {
   name: "WheelDraw",
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
+    LuckyWheel,
   },
   data() {
     return {
+      blocks: [
+        { padding: "10px", background: "#ffc27a" },
+        { padding: "10px", background: "#ff4a4c" },
+        { padding: "0px", background: "#fff" },
+      ],
       noticeList: [
         { id: "xx1", title: "zhaokkkk001" },
         { id: "xx2", title: "zhaokkkk002" },
