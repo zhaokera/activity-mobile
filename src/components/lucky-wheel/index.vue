@@ -217,8 +217,8 @@ export default {
 }
 
 .prize-pic img {
-  width: 250px;
-  height: 150px;
+  width: 200px;
+  height: 120px;
   margin-top: 20px;
 }
 .prize-type {
