@@ -26,13 +26,15 @@
         </van-swipe-item>
       </van-swipe>
     </div>
-    <lucky-wheel></lucky-wheel>
+    <lucky-wheel class="wheel"></lucky-wheel>
   </div>
 </template>
 
 <script>
 import { Swipe, SwipeItem } from "vant";
 import LuckyWheel from "../../components/lucky-wheel";
+import axios from "axios";
+require("../../mock/mock")
 
 export default {
   name: "WheelDraw",
@@ -40,6 +42,13 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     LuckyWheel,
+  },
+  // 挂载的时候获取新闻列表
+  mounted() {
+    axios.post("/mock/wheel/load").then((res) => {
+      // url即在mock.js中定义的
+      console.log(res.data); // 打印一下响应数据
+    });
   },
   data() {
     return {
@@ -121,5 +130,8 @@ export default {
       color: #ffd87a;
     }
   }
+}
+.wheel {
+  margin-top: 29px;
 }
 </style>
