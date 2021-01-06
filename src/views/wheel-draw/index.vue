@@ -4,7 +4,8 @@
       <div class="logo"></div>
       <div class="title">欢客互动的欢小铺</div>
     </div>
-    <div class="notice-view">
+
+    <div class="notice-view" v-if="loadData.count">
       <van-swipe
         class="swipe-view"
         :autoplay="3000"
@@ -17,14 +18,18 @@
           :key="item.id"
           height="60px"
         >
-          <img
+          <NoticeView :title="item.title" />
+          <!-- <img
             class="notice-img"
             src="https://isv.alibabausercontent.com/010221699045/imgextra/i4/732742758/O1CN01RMcFBM1WFCxq4Rcbn_!!732742758-2-isvtu-010221699045.png"
             alt="notice"
           />
-          <span class="notice-text">{{ item.title }}</span>
+          <span class="notice-text">{{ item.title }}</span> -->
         </van-swipe-item>
       </van-swipe>
+    </div>
+    <div class="notice-view" v-else>
+      <NoticeView title="期待您的大名出现在这里!" />
     </div>
     <lucky-wheel class="wheel"></lucky-wheel>
   </div>
@@ -33,8 +38,9 @@
 <script>
 import { Swipe, SwipeItem } from "vant";
 import LuckyWheel from "../../components/lucky-wheel";
+import NoticeView from "./components/notice-view";
 import axios from "axios";
-require("../../mock/mock")
+require("../../mock/mock");
 
 export default {
   name: "WheelDraw",
@@ -42,21 +48,11 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     LuckyWheel,
-  },
-  // 挂载的时候获取新闻列表
-  mounted() {
-    axios.post("/mock/wheel/load").then((res) => {
-      // url即在mock.js中定义的
-      console.log(res.data); // 打印一下响应数据
-    });
+    NoticeView,
   },
   data() {
     return {
-      blocks: [
-        { padding: "10px", background: "#ffc27a" },
-        { padding: "10px", background: "#ff4a4c" },
-        { padding: "0px", background: "#fff" },
-      ],
+      loadData: {},
       noticeList: [
         { id: "xx1", title: "zhaokkkk001" },
         { id: "xx2", title: "zhaokkkk002" },
@@ -64,6 +60,13 @@ export default {
         { id: "xx4", title: "zhaokkkk004" },
       ],
     };
+  },
+  mounted() {
+    axios.post("/mock/wheel/load").then((res) => {
+      this.loadData = res.data.data;
+      // url即在mock.js中定义的
+      console.log(JSON.stringify(this.loadData)); // 打印一下响应数据
+    });
   },
 };
 </script>
@@ -121,14 +124,14 @@ export default {
     align-items: center;
 
     width: 100%;
-    .notice-img {
-      width: 22px;
-      height: 21px;
-    }
-    .notice-text {
-      margin-left: 17px;
-      color: #ffd87a;
-    }
+    // .notice-img {
+    //   width: 22px;
+    //   height: 21px;
+    // }
+    // .notice-text {
+    //   margin-left: 17px;
+    //   color: #ffd87a;
+    // }
   }
 }
 .wheel {
