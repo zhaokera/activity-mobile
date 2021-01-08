@@ -4,8 +4,7 @@
       <div class="logo"></div>
       <div class="title">欢客互动的欢小铺</div>
     </div>
-
-    <div class="notice-view" v-if="loadData.count">
+    <div class="notice-view">
       <van-swipe
         class="swipe-view"
         :autoplay="3000"
@@ -14,24 +13,26 @@
       >
         <van-swipe-item
           class="swipe-item-view"
-          v-for="item of noticeList"
+          v-for="item of loadData.logs"
           :key="item.id"
           height="60px"
         >
-          <NoticeView :title="item.title" />
-          <!-- <img
-            class="notice-img"
-            src="https://isv.alibabausercontent.com/010221699045/imgextra/i4/732742758/O1CN01RMcFBM1WFCxq4Rcbn_!!732742758-2-isvtu-010221699045.png"
-            alt="notice"
+          <NoticeView
+            :title="
+              item.userId
+                ? `恭喜${item.buyerNick.substring(0, 1)}***网友中了${
+                    item.fansRemark
+                  }`
+                : item.noticeString
+            "
           />
-          <span class="notice-text">{{ item.title }}</span> -->
         </van-swipe-item>
       </van-swipe>
     </div>
-    <div class="notice-view" v-else>
-      <NoticeView title="期待您的大名出现在这里!" />
-    </div>
     <lucky-wheel class="wheel"></lucky-wheel>
+    <div class="fun-btn-view">
+      <div class="fun-btn"></div>
+    </div>
   </div>
 </template>
 
@@ -39,8 +40,7 @@
 import { Swipe, SwipeItem } from "vant";
 import LuckyWheel from "../../components/lucky-wheel";
 import NoticeView from "./components/notice-view";
-import axios from "axios";
-require("../../mock/mock");
+import { getWheelLoad } from "../../service/activity";
 
 export default {
   name: "WheelDraw",
@@ -52,20 +52,21 @@ export default {
   },
   data() {
     return {
-      loadData: {},
-      noticeList: [
-        { id: "xx1", title: "zhaokkkk001" },
-        { id: "xx2", title: "zhaokkkk002" },
-        { id: "xx3", title: "zhaokkkk003" },
-        { id: "xx4", title: "zhaokkkk004" },
-      ],
+      loadData: { logs: [] },
     };
   },
   mounted() {
-    axios.post("/mock/wheel/load").then((res) => {
-      this.loadData = res.data.data;
-      // url即在mock.js中定义的
-      console.log(JSON.stringify(this.loadData)); // 打印一下响应数据
+    const that = this;
+    getWheelLoad().then((res) => {
+      that.loadData = res.result;
+      console.log(JSON.stringify(that.loadData.logs)); // 打印一下响应数据
+      if (!that.loadData.logs.length) {
+        that.loadData.logs = [
+          {
+            noticeString: "期待您的大名出现在这里!",
+          },
+        ];
+      }
     });
   },
 };
@@ -102,39 +103,37 @@ export default {
       color: #ffffff;
     }
   }
-}
-.notice-view {
-  display: flex;
-  width: 480px;
-  height: 60px;
-  margin-top: 253px;
-  background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/banner12_03.png)
-    no-repeat;
-  border-radius: 20px 20px 10px 10px;
-  background-size: 100% 100%;
-  overflow: hidden;
-}
-
-.swipe-view {
-  height: 60px;
-  width: 100%;
-  .swipe-item-view {
+  .notice-view {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    // .notice-img {
-    //   width: 22px;
-    //   height: 21px;
-    // }
-    // .notice-text {
-    //   margin-left: 17px;
-    //   color: #ffd87a;
-    // }
+    width: 480px;
+    height: 60px;
+    margin-top: 253px;
+    background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/banner12_03.png)
+      no-repeat;
+    border-radius: 20px 20px 10px 10px;
+    background-size: 100% 100%;
+    overflow: hidden;
+    .swipe-view {
+      height: 60px;
+      width: 100%;
+      .swipe-item-view {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+    }
   }
 }
+
 .wheel {
   margin-top: 29px;
+}
+.fun-btn {
+  width: 190px;
+  height: 71px;
+  background: url("https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png")
+    no-repeat;
+  background-size: 100% 100%;
 }
 </style>
