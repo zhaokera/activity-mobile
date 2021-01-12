@@ -37,17 +37,16 @@
     </div>
     <!-- <div class="price-view"> -->
     <!-- </div> -->
-    <div class="swiper-content">
-      <swiper ref="mySwiper" :options="swiperOption" class="show-swiper">
-        <template v-for="(item, index) in list">
-          <swiper-slide :key="index">
-            <div class="swiper-item">
-              <span>{{ item }}</span>
-            </div>
-          </swiper-slide>
-        </template>
-      </swiper>
-    </div>
+
+    <swiper ref="mcSwiper" class="echw-fb-swiper" :options="swiperOption">
+      <swiper-slide
+        class="echw-fb-swiper-slide"
+        v-for="(item, idx) in userContentImg"
+        :key="idx"
+      >
+        <img :style="`backgroundColor: white`" :src="item" />
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
@@ -58,8 +57,7 @@ import NoticeView from "./components/notice-view";
 import { getWheelLoad } from "../../service/activity";
 import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import { mapState } from "vuex";
-import store from "@/store";
+
 // import "swiper/css/swiper.css";
 
 export default {
@@ -85,58 +83,23 @@ export default {
       ],
       list: [1, 2, 3, 4, 5, 6],
       swiperOption: {
-        // 设置slider容器能够同时显示的slides数量，默认为1， 'auto'则自动根据slides的宽度来设定数量
-        slidesPerView: "auto",
-        /*
-         * 开启这个参数来计算每个slide的progress(进度、进程)
-         * 对于slide的progress属性，活动的那个为0，其他的依次减1
-         */
-        watchSlidesProgress: true,
-        // 默认active slide居左，设置为true后居中
-        centeredSlides: true,
-        // 当你创建一个Swiper实例时是否立即初始化，这里我们手动初始化
-        init: false,
-        longSwipesRatio: 0.1,
-        touchReleaseOnEdges: true,
-        observer: true, // 修改swiper自己或子元素时，自动初始化swiper
-        observeParents: true, // 修改swiper的父元素时，自动初始化swiper
-        on: {
-          progress: function () {
-            for (let i = 0; i < this.slides.length; i++) {
-              const slide = this.slides.eq(i); // 指定匹配元素集缩减值
-              const slideProgress = this.slides[i].progress; // 当前元素集的progress值
-
-              let modify = 0; // 偏移权重
-              if (parseInt(Math.abs(slideProgress)) > 0) {
-                modify = Math.abs(slideProgress) * 0.2; // 不一定要0.2，可自行调整
-              }
-              const translate = slideProgress * modify * 500 + "px"; // 500是swiper-slide的宽度
-              const scale = 1 - Math.abs(slideProgress) / 5; // 缩放权重值，随着progress由中向两边依次递减，可自行调整
-              const zIndex = 99 - Math.abs(Math.round(10 * slideProgress));
-              slide.transform(`translateX(${translate}) scale(${scale})`);
-              slide.css("zIndex", zIndex);
-              slide.css("opacity", 1); // 是否可见
-              if (parseInt(Math.abs(slideProgress)) > 1) {
-                // 设置了只有选中的元素以及他两遍的显示，其他隐藏
-                slide.css("opacity", 0);
-              }
-            }
-          },
-          slideChange: function () {
-            store.commit("SET_ACTIVE_INDEX", this.activeIndex);
-          },
-        },
+        centeredSlides: true, // 当前slide居中显示
+        slidesPerView: "auto", // 1是显示1个banner, 'auto'自适应
+        spaceBetween: 12, // slide间隔（px）
+        loop: false,
+        autoplay: true,
+        delay: 5000, //自动轮播， 默认 3000 ms
+        simulateTouch: true, // 鼠标拖拽
+        allowTouchMove: true, // 触摸滑动
       },
+      userContentImg: [
+        "https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png",
+        "https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/showPrize_02.png",
+        "https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png",
+      ], // n个
     };
   },
-  computed: {
-    swiper() {
-      return this.$refs.mySwiper.swiper;
-    },
-    ...mapState({
-      activeItemIndex: (state) => state.activeIndex,
-    }),
-  },
+  computed: {},
   mounted() {
     const that = this;
     getWheelLoad().then((res) => {
@@ -150,16 +113,8 @@ export default {
         ];
       }
     });
-    this.initSwiper();
   },
-  methods: {
-    initSwiper() {
-      this.$nextTick(async () => {
-        await this.swiper.init(); // 现在才初始化
-        await this.swiper.slideTo(this.activeItemIndex);
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -259,35 +214,37 @@ export default {
   background-size: 100% 100%;
 }
 
-.swiper-content {
+.echw-fb-swiper {
   width: 750px;
-  height: 500px;
-  position: relative;
-  overflow: hidden;
-  margin: 0 auto;
-  padding: 50px 0;
-
-  .show-swiper {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-
-    .swiper-slide {
+  height: 300px;
+  // padding-left: 300px;
+  // swiper-slide -- 无论是不是当前slide，宽高保持不变
+  .echw-fb-swiper-slide {
+    width: 750px;
+    height: 300px;
+    
+    // 图片居左
+    img {
+      display: block;
+      width: 400px;
+      height: 260px;
+      // margin: 20px 0;
+      border-radius: 12px;
+      
+    }
+  }
+  // 当前slide -- 图片放大
+  .swiper-slide-active {
+    img {
       width: 500px;
-      // 表示所有属性都有动作效果，过度时间为0.4s，以慢速开始和结束的过渡效果
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-      .swiper-item {
-        width: 100%;
-        height: 500px;
-        background: rgb(140, 172, 134);
-        border-radius: 6px;
-        color: orangered;
-        font-size: 24px;
-        line-height: 1.5;
-        border: 1px solid orangered;
-      }
+      height: 300px;
+      // margin: 0;
+    }
+  }
+  // 前slide -- 图片居右
+  .swiper-slide-prev {
+    img {
+      // margin-left: 50px;
     }
   }
 }
