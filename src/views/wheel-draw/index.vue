@@ -44,7 +44,7 @@
         v-for="(item, idx) in userContentImg"
         :key="idx"
       >
-        <img :style="`backgroundColor: white`" :src="item" />
+        <img :src="item" />
       </swiper-slide>
     </swiper>
   </div>
@@ -170,11 +170,11 @@ export default {
       }
     }
   }
+  .wheel {
+    margin-top: 29px;
+  }
 }
 
-.wheel {
-  margin-top: 29px;
-}
 .fun-btn-view {
   display: flex;
   flex-wrap: wrap;
@@ -189,20 +189,21 @@ export default {
   background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/task_02.png)
     no-repeat;
   background-size: 100% 100%;
+  .fun-btn {
+    display: flex;
+    box-sizing: border-box;
+    width: 190px;
+    height: 71px;
+    padding-top: 15px;
+    justify-content: center;
+    font-size: 26px;
+    color: #c60600;
+    background: url("https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png")
+      no-repeat;
+    background-size: 100% 100%;
+  }
 }
-.fun-btn {
-  display: flex;
-  box-sizing: border-box;
-  width: 190px;
-  height: 71px;
-  padding-top: 15px;
-  justify-content: center;
-  font-size: 26px;
-  color: #c60600;
-  background: url("https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png")
-    no-repeat;
-  background-size: 100% 100%;
-}
+
 .price-view {
   // display: flex;
   margin-top: 35px;
@@ -215,36 +216,52 @@ export default {
 }
 
 .echw-fb-swiper {
-  width: 750px;
+  width: 500px;
   height: 300px;
   // padding-left: 300px;
   // swiper-slide -- 无论是不是当前slide，宽高保持不变
   .echw-fb-swiper-slide {
-    width: 750px;
-    height: 300px;
-    
+    // width: 750px;
+    // height: 300px;
+
     // 图片居左
-    img {
-      display: block;
-      width: 400px;
-      height: 260px;
-      // margin: 20px 0;
-      border-radius: 12px;
-      
-    }
+    // img {
+    //   display: block;
+    //   width: 400px;
+    //   height: 260px;
+    //   margin: 20px 0;
+    //   border-radius: 12px;
+    // }
   }
-  // 当前slide -- 图片放大
-  .swiper-slide-active {
+  .swiper-slide{
+    width: 150px;
     img {
-      width: 500px;
-      height: 300px;
-      // margin: 0;
+      width: 150px;
     }
   }
   // 前slide -- 图片居右
   .swiper-slide-prev {
+    width: 150px;
+    
     img {
-      // margin-left: 50px;
+      padding-left: 100px;
+      width: 150px;
+    }
+  }
+  // 当前slide -- 图片放大
+  .swiper-slide-active {
+    width: 200px;
+    img {
+      width: 200px;
+      height: 300px;
+    }
+  }
+
+  .swiper-slide-next {
+    width: 150px;
+    img {
+      padding-right: 100px;
+      width: 150px;
     }
   }
 }
