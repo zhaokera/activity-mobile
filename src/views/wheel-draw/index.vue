@@ -31,22 +31,28 @@
     </div>
     <lucky-wheel class="wheel"></lucky-wheel>
     <div class="fun-btn-view">
-      <div v-for="name of funBtnNames" :key="name" class="fun-btn">
+      <div
+        v-for="(name, index) of funBtnNames"
+        :key="name"
+        class="fun-btn"
+        @click="clickFunBtn(name, index)"
+      >
         {{ name }}
       </div>
     </div>
-    <!-- <div class="price-view"> -->
-    <!-- </div> -->
+    <prize-swiper-view />
+    <div class="rule-view">
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
+      <div>zhaokkk</div>
 
-    <swiper ref="mcSwiper" class="echw-fb-swiper" :options="swiperOption">
-      <swiper-slide
-        class="echw-fb-swiper-slide"
-        v-for="(item, idx) in userContentImg"
-        :key="idx"
-      >
-        <img :src="item" />
-      </swiper-slide>
-    </swiper>
+    </div>
   </div>
 </template>
 
@@ -54,11 +60,8 @@
 import { Swipe, SwipeItem } from "vant";
 import LuckyWheel from "../../components/lucky-wheel";
 import NoticeView from "./components/notice-view";
+import PrizeSwiperView from "./components/prize-swiper-view";
 import { getWheelLoad } from "../../service/activity";
-import "swiper/swiper-bundle.css";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-
-// import "swiper/css/swiper.css";
 
 export default {
   name: "WheelDraw",
@@ -67,8 +70,7 @@ export default {
     [SwipeItem.name]: SwipeItem,
     LuckyWheel,
     NoticeView,
-    Swiper,
-    SwiperSlide,
+    PrizeSwiperView,
   },
   data() {
     return {
@@ -81,22 +83,6 @@ export default {
         "浏览宝贝",
         "分享活动",
       ],
-      list: [1, 2, 3, 4, 5, 6],
-      swiperOption: {
-        centeredSlides: true, // 当前slide居中显示
-        slidesPerView: "auto", // 1是显示1个banner, 'auto'自适应
-        spaceBetween: 12, // slide间隔（px）
-        loop: false,
-        autoplay: true,
-        delay: 5000, //自动轮播， 默认 3000 ms
-        simulateTouch: true, // 鼠标拖拽
-        allowTouchMove: true, // 触摸滑动
-      },
-      userContentImg: [
-        "https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png",
-        "https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/showPrize_02.png",
-        "https://isv.alibabausercontent.com/010221699045/imgextra/i2/732742758/O1CN01Js2p8u1WFCxqA08ec_!!732742758-2-isvtu-010221699045.png",
-      ], // n个
     };
   },
   computed: {},
@@ -114,7 +100,11 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    clickFunBtn(name, index) {
+      console.log(name + index);
+    },
+  },
 };
 </script>
 
@@ -183,8 +173,6 @@ export default {
   width: 750px;
   height: 238px;
   margin-top: 80px;
-  // padding-top: 42px;
-  // padding-left: 34px;
   padding: 42px 34px 20px 34px;
   background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/task_02.png)
     no-repeat;
@@ -204,65 +192,22 @@ export default {
   }
 }
 
-.price-view {
-  // display: flex;
-  margin-top: 35px;
-  box-sizing: border-box;
+.rule-view {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
   width: 750px;
-  height: 450px;
-  background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/showPrize_02.png)
-    no-repeat;
-  background-size: 100% 100%;
-}
+  min-height: 318px;
+  box-sizing: border-box;
+  // background: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/actIntroduce_02.png)
+  //   no-repeat;
+  // background-size: 100%;
 
-.echw-fb-swiper {
-  width: 500px;
-  height: 300px;
-  // padding-left: 300px;
-  // swiper-slide -- 无论是不是当前slide，宽高保持不变
-  .echw-fb-swiper-slide {
-    // width: 750px;
-    // height: 300px;
+  border-width: 60px 35px 35px 35px;
+  border-style: solid;
 
-    // 图片居左
-    // img {
-    //   display: block;
-    //   width: 400px;
-    //   height: 260px;
-    //   margin: 20px 0;
-    //   border-radius: 12px;
-    // }
-  }
-  .swiper-slide{
-    width: 150px;
-    img {
-      width: 150px;
-    }
-  }
-  // 前slide -- 图片居右
-  .swiper-slide-prev {
-    width: 150px;
-    
-    img {
-      padding-left: 100px;
-      width: 150px;
-    }
-  }
-  // 当前slide -- 图片放大
-  .swiper-slide-active {
-    width: 200px;
-    img {
-      width: 200px;
-      height: 300px;
-    }
-  }
-
-  .swiper-slide-next {
-    width: 150px;
-    img {
-      padding-right: 100px;
-      width: 150px;
-    }
-  }
+  border-image-source: url(https://cjwx.oss-cn-zhangjiakou.aliyuncs.com/wheel1212/actIntroduce_02.png);
+  border-image-slice: 60 35 35 35 fill;
+  border-image-width: 60px 35px 35px 35px;
 }
 </style>
